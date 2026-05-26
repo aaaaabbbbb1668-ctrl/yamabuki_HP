@@ -3610,6 +3610,40 @@ html {
     word-break: auto-phrase;
     overflow-wrap: break-word;
     line-break: strict;
+    text-wrap: balance;
+    hanging-punctuation: allow-end;
+  }
+
+  /* 段落・リード文は pretty で末尾孤立行を避ける */
+  p,
+  .section__lead,
+  .lead,
+  .prose p,
+  .form-card__lead,
+  .member-banner p,
+  .cta-band p,
+  .reason-card p,
+  .property-feature-card p,
+  .overview-card__body p,
+  .office-grid .info-card p,
+  .flow-card p,
+  .hours-box p,
+  .tel-box > p {
+    line-break: strict;
+    text-wrap: pretty;
+    word-break: normal;
+    word-break: auto-phrase;
+  }
+
+  /* 行頭に「、。」が来ないよう（行末禁則）。auto-phrase 非対応ブラウザ用の保険 */
+  .vertical-title span,
+  .section__head h2,
+  .page-hero h1,
+  .member-banner h2,
+  .cta-band h2,
+  .overview-intro h2,
+  .form-card h2 {
+    line-break: strict;
   }
 
   /* Members / CTA バナー：見出しの追加圧縮 */
