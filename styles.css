@@ -3603,6 +3603,71 @@ html {
   }
 }
 
+/* 日本語見出しの折返しをスマホで自然に許可（keep-all を解除） */
+@media (max-width: 767px) {
+  h1, h2, h3 {
+    word-break: normal;
+    word-break: auto-phrase;
+    overflow-wrap: break-word;
+    line-break: strict;
+  }
+
+  /* Members / CTA バナー：見出しの追加圧縮 */
+  .member-banner h2,
+  .cta-band h2 {
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+  }
+
+  .member-banner .label,
+  .cta-band .label {
+    letter-spacing: 0.3em;
+  }
+
+  /* オーバービュー（事業内容ページの大見出し）の折返し改善 */
+  .overview-intro h2 {
+    font-size: clamp(1.2rem, 5.2vw, 1.5rem);
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+    word-break: normal;
+    word-break: auto-phrase;
+  }
+
+  /* ページヒーロー見出しの圧縮 */
+  .page-hero h1 {
+    font-size: clamp(1.55rem, 6.5vw, 1.9rem);
+    letter-spacing: 0.04em;
+  }
+
+  /* セクション見出しも折返しを許容 */
+  .section__head h2,
+  .form-card h2,
+  .message-content h2,
+  .story-content h2,
+  .hours-box h2,
+  .tel-box h2,
+  .property-feature-card h3,
+  .reason-card h3,
+  .overview-card__body h3,
+  .office-grid .info-card h3,
+  .flow-card h3 {
+    word-break: normal;
+    word-break: auto-phrase;
+    overflow-wrap: break-word;
+  }
+
+  /* ページヒーロー：左右にゆとり */
+  .page-hero {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .page-hero .container {
+    padding-left: 4px;
+  }
+}
+
 .loader {
   position: fixed;
   inset: 0;
