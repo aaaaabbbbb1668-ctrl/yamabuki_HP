@@ -2494,6 +2494,10 @@ select:focus {
   border: 0;
 }
 
+.mobile-br {
+  display: none;
+}
+
 .fade-in {
   opacity: 0;
   transform: translateY(40px);
@@ -2810,16 +2814,32 @@ html {
 
   .vertical-title {
     gap: 10px;
-    font-size: 2.55rem;
+    font-size: 2.4rem;
   }
 
-  .vertical-title span {
+  .vertical-title span,
+  .vertical-title span:nth-child(2) {
     min-height: 0;
     padding: 16px 9px;
   }
 
   .vertical-title span:nth-child(2) {
-    margin-top: 46px;
+    margin-top: 22px;
+  }
+
+  /* スマホ用 br：通常は非表示、モバイル時のみ改行を有効化 */
+  .mobile-br {
+    display: inline;
+  }
+
+  /* ヒーロー画像：建物が右に寄りすぎないよう左寄せに */
+  .hero__image {
+    background-position: 28% center;
+  }
+
+  .hero,
+  .hero__inner {
+    min-height: min(76vh, 600px);
   }
 
   .header-actions {
