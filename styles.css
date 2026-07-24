@@ -5131,7 +5131,7 @@ body.is-ready .hero__catch--chars .hero__catch-line > span {
 
 .diagram-frame {
   margin: 0;
-  max-width: 860px;
+  max-width: none;
   margin-inline: auto;
   padding: clamp(20px, 3vw, 40px);
   background: #fff;
