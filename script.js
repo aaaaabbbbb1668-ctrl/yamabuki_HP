@@ -40,45 +40,62 @@ if (loader) {
     } catch (e) {
       /* ignore */
     }
-    const minDisplayMs = 3700;
-    const start = performance.now();
-    const morphLogoToHeader = () => {
-      const bigLogo = loader.querySelector(".loader__logo");
-      const headerLogo = document.querySelector(".brand img");
-      if (!bigLogo || !headerLogo) return;
-      const bigRect = bigLogo.getBoundingClientRect();
-      const headerRect = headerLogo.getBoundingClientRect();
-      if (bigRect.width === 0 || headerRect.width === 0) return;
-      const bigCx = bigRect.left + bigRect.width / 2;
-      const bigCy = bigRect.top + bigRect.height / 2;
-      const headerCx = headerRect.left + headerRect.width / 2;
-      const headerCy = headerRect.top + headerRect.height / 2;
-      const dx = headerCx - bigCx;
-      const dy = headerCy - bigCy;
-      const scale = headerRect.width / bigRect.width;
-      bigLogo.style.setProperty("--logo-dx", `${dx}px`);
-      bigLogo.style.setProperty("--logo-dy", `${dy}px`);
-      bigLogo.style.setProperty("--logo-scale", String(scale));
-      loader.classList.add("is-morphing");
-    };
-    const hideLoader = () => {
-      const elapsed = performance.now() - start;
-      const remaining = Math.max(0, minDisplayMs - elapsed);
-      setTimeout(() => {
-        morphLogoToHeader();
-        loader.classList.add("is-hidden");
-        document.body.classList.remove("is-loading");
-        setBodyReady();
-      }, remaining);
-    };
-    if (document.readyState === "complete") {
-      hideLoader();
-    } else {
-      window.addEventListener("load", hideLoader, { once: true });
-    }
+    // 演出は固定タイムライン（CSSアニメーションと同期）：
+    // 0.15s 一文字ずつ入場 → 0.9s 金線・英字 → 2.2s 文章退場 → 2.5s ロゴ → 3.3s カーテン → 4.4s 全体フェード
+    setTimeout(() => {
+      loader.classList.add("is-hidden");
+      document.body.classList.remove("is-loading");
+      setBodyReady();
+    }, 4400);
+    setTimeout(() => {
+      loader.classList.add("is-done");
+      loader.parentNode && loader.parentNode.removeChild(loader);
+    }, 5200);
   }
 } else {
   setBodyReady();
+}
+
+const heroCatch = document.querySelector(".hero__catch");
+if (heroCatch && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const catchText = heroCatch.textContent.trim();
+  heroCatch.setAttribute("aria-label", catchText);
+  heroCatch.textContent = "";
+  heroCatch.classList.add("hero__catch--chars");
+  const segments = catchText.split("、").filter(Boolean).map((seg, i, arr) => (i < arr.length - 1 ? seg + "、" : seg));
+  let charIndex = 0;
+  segments.forEach((segment) => {
+    const line = document.createElement("span");
+    line.className = "hero__catch-line";
+    line.setAttribute("aria-hidden", "true");
+    Array.from(segment).forEach((ch) => {
+      const s = document.createElement("span");
+      s.textContent = ch;
+      if (ch === "\u3001" || ch === "\u3002") s.classList.add("is-punct");
+      s.style.transitionDelay = `${0.35 + charIndex * 0.04}s`;
+      charIndex += 1;
+      line.appendChild(s);
+    });
+    heroCatch.appendChild(line);
+  });
+}
+
+const reasonScrollItems = document.querySelectorAll(".reason-scroll__items .reason-item[data-reason]");
+const reasonLayers = document.querySelectorAll(".reason-visual__layer");
+if (reasonScrollItems.length && reasonLayers.length && "IntersectionObserver" in window) {
+  const reasonObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const idx = entry.target.dataset.reason;
+        reasonLayers.forEach((layer) => {
+          layer.classList.toggle("is-active", layer.dataset.reason === idx);
+        });
+      });
+    },
+    { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+  );
+  reasonScrollItems.forEach((item) => reasonObserver.observe(item));
 }
 
 let scrollRafPending = false;
